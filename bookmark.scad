@@ -3,8 +3,8 @@
 /* parameters */
 //body
 bookmark_width=40;
-bookmark_len=110;
-bookmark_thickness=0.4;
+bookmark_len=130;
+bookmark_thickness=0.5;
 
 //pattern
 pattern_image="pattern.svg"; //use DXF for earlier versions of OpenSCAD than 2019.05
@@ -13,7 +13,7 @@ pattern_scale=[.1,.1];
 pattern_rotation=180;
 
 //features
-draft_angle=2;
+draft_angle=.4;
 fillet_radius=5;
 
 
@@ -26,7 +26,7 @@ module fillet_tool(r=1, angle=0) {
 		difference() {
 			cube([2*r,2*r,10]);
 			translate([0.01,0.01,-1])
-				cylinder(h=12, r=r);
+				cylinder(h=12, r=r, $fn=30);
 		}
 }
 
