@@ -8,13 +8,15 @@ bookmark_thickness=0.5;
 
 //pattern
 pattern_image="pattern.svg"; //use DXF for earlier versions of OpenSCAD than 2019.05
-patern_translation=[30,33,-5];
+patern_translation=[30,45,-5];
 pattern_scale=[.1,.1];
 pattern_rotation=180;
 
 //features
 draft_angle=.4;
 fillet_radius=5;
+hole_radius=5/2;
+hole_offset=4;
 
 
 /* helper functions */
@@ -41,6 +43,10 @@ difference() {
 		linear_extrude(10, convexity=20)
 			scale(pattern_scale) rotate(pattern_rotation)
 				import(pattern_image);
+
+	//put a hole in the top e.g. for a tassel
+	translate([bookmark_width/2,hole_offset+hole_radius,-5])
+		cylinder(h=10, r=hole_radius, $fn=30);
 
 	//cut a draft angle on the sides of the bookmark
 	translate([bookmark_width,0,-5]) rotate([0,0,draft_angle])
