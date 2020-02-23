@@ -7,6 +7,7 @@
  * copyright and related or neighboring rights to Simple Bookmark.
  */
 
+
 /* output options */
 outline_mode=false;
 
@@ -28,6 +29,7 @@ draft_angle=.4;
 fillet_radius=5;
 hole_radius=6/2;
 hole_offset=8;
+edge_guard=5;
 
 
 /* helper functions */
@@ -44,44 +46,69 @@ module fillet_tool(r=1, angle=0) {
 		}
 }
 
+module bookmark_outline(height=bookmark_thickness, expansion=0) {
+	//apply expansion factor
+	bookmark_width=bookmark_width+expansion;
+	bookmark_len=bookmark_len+expansion;
+	fillet_radius=(fillet_radius+expansion/2 > 0) ?
+		fillet_radius+expansion/2 : .1;
+	hole_radius=hole_radius-expansion/2;
+	hole_offset=hole_offset+expansion;
+
+	//create the outline
+	translate([-expansion/2,-expansion/2])
+		difference() {
+			//overall bookmark body shape
+			cube([bookmark_width,bookmark_len,height]);
+
+			//put a hole in the top e.g. for a tassel
+			translate([bookmark_width/2,hole_offset+hole_radius,-5])
+				cylinder(h=10, r=hole_radius, $fn=30);
+
+			//cut a draft angle on the sides of the bookmark
+			translate([bookmark_width,0,-5]) rotate([0,0,draft_angle])
+				cube([bookmark_width*2,bookmark_len*2,10]);
+			translate([0,0,5]) rotate([0,180,-draft_angle])
+				cube([bookmark_width*2,bookmark_len*2,10]);
+
+			//cut fillets in the corners
+			translate([bookmark_width-draft_skew()-fillet_radius, bookmark_len-fillet_radius])
+				fillet_tool(fillet_radius, 0);
+			translate([draft_skew()+fillet_radius, bookmark_len-fillet_radius])
+				fillet_tool(fillet_radius, 90);
+			translate([fillet_radius, fillet_radius])
+				fillet_tool(fillet_radius, 180);
+			translate([bookmark_width-fillet_radius, fillet_radius])
+				fillet_tool(fillet_radius, 270);
+		}
+}
+
 
 /* main module */
 module simple_bookmark() {
+	//create the bookmark shape with carved pattern
 	difference() {
-		//overall bookmark body shape
-		cube([bookmark_width,bookmark_len,bookmark_thickness]);
+		bookmark_outline();
 
 		//pattern to carve into the bookmark body
-		if (!outline_mode)
-			translate(patern_translation) translate([0,0,-5])
-				linear_extrude(10, convexity=20)
-					scale(pattern_scale) rotate(pattern_rotation)
-						import(pattern_image);
+		translate(patern_translation) translate([0,0,-5])
+			linear_extrude(10, convexity=20)
+				scale(pattern_scale) rotate(pattern_rotation)
+					import(pattern_image);
+	}
 
-		//put a hole in the top e.g. for a tassel
-		translate([bookmark_width/2,hole_offset+hole_radius,-5])
-			cylinder(h=10, r=hole_radius, $fn=30);
+	//create an edge guard
+	difference() {
+		bookmark_outline();
 
-		//cut a draft angle on the sides of the bookmark
-		translate([bookmark_width,0,-5]) rotate([0,0,draft_angle])
-			cube([bookmark_width*2,bookmark_len*2,10]);
-		translate([0,0,5]) rotate([0,180,-draft_angle])
-			cube([bookmark_width*2,bookmark_len*2,10]);
-
-		//cut fillets in the corners
-		translate([bookmark_width-draft_skew()-fillet_radius, bookmark_len-fillet_radius])
-			fillet_tool(fillet_radius, 0);
-		translate([draft_skew()+fillet_radius, bookmark_len-fillet_radius])
-			fillet_tool(fillet_radius, 90);
-		translate([fillet_radius, fillet_radius])
-			fillet_tool(fillet_radius, 180);
-		translate([bookmark_width-fillet_radius, fillet_radius])
-			fillet_tool(fillet_radius, 270);
+		//carve out center leaving just expanded portion
+		translate([0,0,-1])
+			bookmark_outline(height=2, expansion=-edge_guard);
 	}
 }
 
 if (outline_mode)
 	projection()
-		simple_bookmark();
+		bookmark_outline();
 else
 	simple_bookmark();
