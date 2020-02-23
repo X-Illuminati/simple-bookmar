@@ -8,7 +8,7 @@
  */
 
 /* output options */
-outline_mode=true;
+outline_mode=false;
 
 
 /* parameters */
@@ -19,8 +19,8 @@ bookmark_thickness=0.4;
 
 //pattern
 pattern_image="pattern.svg";
-patern_translation=[32,45];
-pattern_scale=[.1,.1];
+patern_translation=[58.35,195];
+pattern_scale=[1,1];
 pattern_rotation=180;
 
 //features
