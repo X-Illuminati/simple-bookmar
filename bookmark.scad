@@ -1,22 +1,29 @@
-/* simple bookmark - CC0 license */
+/*
+ * Simple Bookmark
+ * (C) 2020 Chris Baker
+ * No rights reserved.
+ *
+ * To the extent possible under law, Chris Baker has waived all
+ * copyright and related or neighboring rights to Simple Bookmark.
+ */
 
 /* parameters */
 //body
-bookmark_width=40;
-bookmark_len=130;
-bookmark_thickness=0.5;
+bookmark_width=45;
+bookmark_len=150;
+bookmark_thickness=0.4;
 
 //pattern
-pattern_image="pattern.svg"; //use DXF for earlier versions of OpenSCAD than 2019.05
-patern_translation=[30,45,-5];
+pattern_image="pattern.svg";
+patern_translation=[32,45];
 pattern_scale=[.1,.1];
 pattern_rotation=180;
 
 //features
 draft_angle=.4;
 fillet_radius=5;
-hole_radius=5/2;
-hole_offset=4;
+hole_radius=6/2;
+hole_offset=8;
 
 
 /* helper functions */
@@ -39,7 +46,7 @@ difference() {
 	cube([bookmark_width,bookmark_len,bookmark_thickness]);
 
 	//pattern to carve into the bookmark body
-	translate(patern_translation)
+	translate(patern_translation) translate([0,0,-5])
 		linear_extrude(10, convexity=20)
 			scale(pattern_scale) rotate(pattern_rotation)
 				import(pattern_image);
