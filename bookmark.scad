@@ -9,7 +9,7 @@
 
 
 /* output options */
-outline_mode=false;
+outline_mode=0; //0=normal, 1=outline, 2=expansion
 
 
 /* parameters */
@@ -107,8 +107,13 @@ module simple_bookmark() {
 	}
 }
 
-if (outline_mode)
+if (outline_mode == 0)
+	simple_bookmark();
+
+if (outline_mode == 1)
 	projection()
 		bookmark_outline();
-else
-	simple_bookmark();
+
+if (outline_mode == 2)
+	projection()
+		bookmark_outline(expansion=-edge_guard);
