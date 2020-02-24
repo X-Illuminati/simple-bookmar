@@ -20,16 +20,17 @@ bookmark_thickness=0.4;
 
 //pattern
 pattern_image="pattern.svg";
-patern_translation=[58.35,195];
+patern_translation=[45.09,150.09];
 pattern_scale=[1,1];
 pattern_rotation=180;
+//#cube([bookmark_width/2, bookmark_len/2, 10]); //alignment helper
 
 //features
 draft_angle=.4;
 fillet_radius=5;
 hole_radius=6/2;
 hole_offset=8;
-edge_guard=5;
+edge_guard=6;
 
 
 /* helper functions */
@@ -111,9 +112,17 @@ if (outline_mode == 0)
 	simple_bookmark();
 
 if (outline_mode == 1)
-	projection()
+	projection() difference() {
 		bookmark_outline();
+		//fiducial
+		translate([bookmark_width/2,bookmark_len/2,-5])
+		cylinder(h=10, r=.1, $fn=4);
+	}
 
 if (outline_mode == 2)
-	projection()
+	projection() difference() {
 		bookmark_outline(expansion=-edge_guard);
+		//fiducial
+		translate([bookmark_width/2,bookmark_len/2,-5])
+		cylinder(h=10, r=.1, $fn=4);
+	}
