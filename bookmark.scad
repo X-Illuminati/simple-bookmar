@@ -20,7 +20,7 @@ bookmark_thickness=0.5;
 
 //pattern
 pattern_image="pattern.svg";
-patern_translation=[45.09,150.09];
+patern_translation=[45.07,150.1];
 pattern_scale=[1,1];
 pattern_rotation=180;
 //#cube([bookmark_width/2, bookmark_len/2, 10]); //alignment helper
