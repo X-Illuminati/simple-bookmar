@@ -16,7 +16,7 @@ outline_mode=0; //0=normal, 1=outline, 2=expansion
 //body
 bookmark_width=45;
 bookmark_len=150;
-bookmark_thickness=0.4;
+bookmark_thickness=0.5;
 
 //pattern
 pattern_image="pattern.svg";
@@ -29,7 +29,7 @@ pattern_rotation=180;
 draft_angle=.4;
 fillet_radius=5;
 hole_radius=6/2;
-hole_offset=8;
+hole_offset=6;
 edge_guard=6;
 
 
