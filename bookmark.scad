@@ -30,7 +30,7 @@ draft_angle=.4;
 fillet_radius=5;
 hole_radius=6/2;
 hole_offset=6;
-edge_guard=6;
+edge_guard=5;
 
 
 /* helper functions */
@@ -49,15 +49,15 @@ module fillet_tool(r=1, angle=0) {
 
 module bookmark_outline(height=bookmark_thickness, expansion=0) {
 	//apply expansion factor
-	bookmark_width=bookmark_width+expansion;
-	bookmark_len=bookmark_len+expansion;
-	fillet_radius=(fillet_radius+expansion/2 > 0) ?
-		fillet_radius+expansion/2 : .1;
-	hole_radius=hole_radius-expansion/2;
-	hole_offset=hole_offset+expansion;
+	bookmark_width=bookmark_width+expansion*2;
+	bookmark_len=bookmark_len+expansion*2;
+	fillet_radius=(fillet_radius+expansion > 0) ?
+		fillet_radius+expansion : .1;
+	hole_radius=hole_radius-expansion;
+	hole_offset=hole_offset+expansion*2;
 
 	//create the outline
-	translate([-expansion/2,-expansion/2])
+	translate([-expansion,-expansion])
 		difference() {
 			//overall bookmark body shape
 			cube([bookmark_width,bookmark_len,height]);
